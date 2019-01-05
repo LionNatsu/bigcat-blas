@@ -1,0 +1,6 @@
+/cmake-build-*/
+/build/
+a.out
+a.exe
+.*
+!.gitignore
