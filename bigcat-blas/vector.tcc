@@ -112,23 +112,23 @@ namespace blas {
     }
 
     template<size_t M>
-    const vector<M> vector<M>::operator*(float k) const {
+    const vector <M> vector<M>::operator*(float k) const {
         return matrix<M, 1>::operator*(k);
     }
 
     template<size_t M>
-    const vector<M> vector<M>::operator/(float k) const {
+    const vector <M> vector<M>::operator/(float k) const {
         return matrix<M, 1>::operator/(k);
     }
 
     template<size_t M>
-    vector<M> &vector<M>::operator+=(const vector &rhs) {
+    vector <M> &vector<M>::operator+=(const vector &rhs) {
         matrix<M, 1>::operator+=(rhs);
         return *this;
     }
 
     template<size_t M>
-    const vector<M> operator*(float k, const vector<M> &vec) {
+    const vector <M> operator*(float k, const vector <M> &vec) {
         return vec * k;
     }
 }

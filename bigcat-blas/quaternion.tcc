@@ -38,7 +38,7 @@ namespace blas {
             data(0) = 0;
             data(1) = *iter++;
             data(2) = *iter++;
-            data(3) = *iter++;
+            data(3) = *iter;
         }
         return *this;
     }

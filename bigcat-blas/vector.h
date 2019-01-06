@@ -26,6 +26,7 @@ namespace blas {
         vector() = default;
 
         vector(const quaternion &);
+
         vector(const matrix<M, 1> &);
 
         vector(std::initializer_list<float>);
@@ -48,9 +49,9 @@ namespace blas {
 
         const vector operator/(float) const;
 
-        float operator*(const vector&) const;
+        float operator*(const vector &) const;
 
-        const vector cross(const vector&) const;
+        const vector cross(const vector &) const;
 
         const vector normalized() const;
 
