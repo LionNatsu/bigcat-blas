@@ -22,7 +22,7 @@ int main() {
     quaternion q = {1, 0, 0, 0};
 
     /*
-     * Inspired by Madgwick's implementation of Mayhony's AHRS algorithm.
+     * Inspired by Madgwick's implementation of Mahony's AHRS algorithm.
      * See http://x-io.co.uk/open-source-imu-and-ahrs-algorithms/
      */
     const float Kp = 120.0, Ki = 0.02;
@@ -87,7 +87,7 @@ namespace physical_model {
     }
 
     const blas::vector<3> gyroscope() {
-        static blas::vector<3> random_walk;  // bias
+        static blas::vector<3> random_walk;
         random_walk += {gyr_noise_x(gen), gyr_noise_y(gen), gyr_noise_z(gen)};
         return gyr_real + gyr_bias + random_walk;
     }
