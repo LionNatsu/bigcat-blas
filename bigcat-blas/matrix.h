@@ -48,6 +48,8 @@ namespace blas {
 
         const matrix operator+(const matrix &) const;
 
+        matrix &operator+=(const matrix &);
+
         const matrix operator-(const matrix &) const;
 
         const matrix operator*(float) const;

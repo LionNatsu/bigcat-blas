@@ -21,7 +21,7 @@
 
 #include "matrix.h"
 #include "vector.h"
-
+#include <type_traits>
 
 #include <cstring>
 
@@ -72,16 +72,49 @@ namespace blas {
     }
 
     template<size_t M>
-    float vector<M>::norm_square() {
+    const vector <M> vector<M>::normalized() const {
+        return matrix<M, 1>::operator*(fast_inv_sqrt((*this) * (*this)));
+    }
+
+    template<size_t M>
+    float vector<M>::operator*(const vector &rhs) const {
         float sum = 0;
-        for(size_t m = 0; m < M; m++)
-            sum += operator()(m) * operator()(m);
+        for (size_t m = 0; m < M; m++)
+            sum += operator()(m) * rhs(m);
         return sum;
     }
 
     template<size_t M>
-    const vector<M> vector<M>::normalized() {
-        return matrix<M, 1>::operator*(fast_inv_sqrt(norm_square()));
+    const vector <M> vector<M>::cross(const vector &rhs) const {
+        static_assert(M == 3);
+        auto u1 = operator()(0), u2 = operator()(1), u3 = operator()(2);
+        auto v1 = rhs(0), v2 = rhs(1), v3 = rhs(2);
+        return vector<3>{
+                u2 * v3 - u3 * v2,
+                u3 * v1 - u1 * v3,
+                u1 * v2 - u2 * v1
+        };
+    }
+
+    template<size_t M>
+    const vector<M> vector<M>::operator*(float k) const {
+        return matrix<M, 1>::operator*(k);
+    }
+
+    template<size_t M>
+    const vector<M> vector<M>::operator/(float k) const {
+        return matrix<M, 1>::operator/(k);
+    }
+
+    template<size_t M>
+    vector<M> &vector<M>::operator+=(const vector &rhs) {
+        matrix<M, 1>::operator+=(rhs);
+        return *this;
+    }
+
+    template<size_t M>
+    const vector<M> operator*(float k, const vector<M> &vec) {
+        return vec * k;
     }
 }
 

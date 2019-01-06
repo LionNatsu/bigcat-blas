@@ -41,14 +41,25 @@ namespace blas {
 
         // Vectors
 
-        float norm_square();
+        vector &operator+=(const vector &);
 
-        const vector normalized();
+        const vector operator*(float) const;
+
+        const vector operator/(float) const;
+
+        float operator*(const vector&) const;
+
+        const vector cross(const vector&) const;
+
+        const vector normalized() const;
 
         // Debugging
 
         const std::string to_string() const;
     };
+
+    template<size_t M>
+    const vector<M> operator*(float, const vector<M> &);
 }
 
 #endif //BIGCAT_BLAS_VECTOR_H
