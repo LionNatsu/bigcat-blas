@@ -17,25 +17,30 @@ int main() {
     using blas::quaternion;
     using blas::vector;
 
-    const float
-            duration = 0.01,
-            Ki = 0.02,
-            Kp = 120.0;
-
+    const float duration = 0.01;
+    int tick = 0;
     quaternion q = {1, 0, 0, 0};
+
+    /*
+     * Inspired by Madgwick's implementation of Mayhony's AHRS algorithm.
+     * See http://x-io.co.uk/open-source-imu-and-ahrs-algorithms/
+     */
+    const float Kp = 120.0, Ki = 0.02;
     vector<3> integrated_error;
-
     for (;;) {
-        static int count = 0;
-        if (count++ == 100) break;
-
+        if (tick++ == 100) break;
         const vector<3> acc = physical_model::accelerometer().normalized();
+        // Assume the real acceleration is pointing to z+,
+        // i.e. there is no accelerated motion.
         const vector<3> acc_expect = q.rotate_inv({0, 0, 1});
 
         const vector<3> mag = physical_model::magnetometer().normalized();
-        const vector<3> mag_zero = q.rotate(mag);
-        const float mag_h = sqrtf(mag_zero(0) * mag_zero(0) + mag_zero(1) * mag_zero(1));
-        const float mag_v = mag_zero(2);
+        const vector<3> mag_0 = q.rotate(mag);
+        // Decompose into x-y plane(horizontal) and z-axis(vertical).
+        const float mag_h = sqrtf(mag_0(0) * mag_0(0) + mag_0(1) * mag_0(1));
+        const float mag_v = mag_0(2);
+        // Assume the real direction of magnetic field is in surface y=0, pointing to x+,
+        // i.e. there is no electromagnetic interference.
         const vector<3> mag_expect = q.rotate_inv({mag_h, 0, mag_v});
 
         const vector<3> error = acc.cross(acc_expect) + mag.cross(mag_expect);
@@ -44,10 +49,10 @@ int main() {
         integrated_error += Ki * error * duration;
         gyr += integrated_error + Kp * error;
 
-        q += 1 / 2.0 * q * gyr * duration;
+        // Approximate the integral
+        q += 0.5 * q * gyr * duration;
         q = q.normalized();
-
-        std::cout << euler_angles(q).to_string() << '\t' << count * duration << 's' << std::endl;
+        std::cout << euler_angles(q).to_string() << '\t' << tick * duration << 's' << std::endl;
     }
     return q.a() == 0;
 }
