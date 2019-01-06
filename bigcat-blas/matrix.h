@@ -30,17 +30,17 @@ namespace blas {
 
         matrix(const matrix &);
 
-        matrix(std::initializer_list<std::initializer_list<float>> list);
+        matrix(std::initializer_list<std::initializer_list<float>>);
 
-        matrix &operator=(std::initializer_list<std::initializer_list<float>> list);
+        matrix &operator=(std::initializer_list<std::initializer_list<float>>);
 
         matrix &operator=(const matrix &);
 
         // Accessing Elements
 
-        float &operator()(size_t m, size_t n);
+        float &operator()(size_t, size_t);
 
-        float operator()(size_t m, size_t n) const;
+        float operator()(size_t, size_t) const;
 
         // Arithmetic
 
@@ -79,7 +79,7 @@ namespace blas {
     };
 
     template<size_t M, size_t N>
-    const matrix<M, N> operator*(float k, const matrix<M, N> &mat);
+    const matrix<M, N> operator*(float, const matrix<M, N> &);
 
 }
 

@@ -27,17 +27,17 @@ namespace blas {
 
         vector(const matrix<M, 1> &);
 
-        vector(std::initializer_list<float> list);
+        vector(std::initializer_list<float>);
 
-        vector &operator=(std::initializer_list<float> list);
+        vector &operator=(std::initializer_list<float>);
 
         vector &operator=(const matrix<M, 1> &);
 
         // Accessing Elements
 
-        float &operator()(size_t m);
+        float &operator()(size_t);
 
-        float operator()(size_t m) const;
+        float operator()(size_t) const;
 
         // Vectors
 
