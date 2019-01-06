@@ -19,10 +19,23 @@
 #ifndef BIGCAT_BLAS_H
 #define BIGCAT_BLAS_H
 
+namespace blas {
+    template<size_t M, size_t N>
+    class matrix;
+
+    template<size_t M>
+    class vector;
+
+    class quaternion;
+}
+
 #include "bigcat-blas/utils.h"
 #include "bigcat-blas/matrix.h"
-#include "bigcat-blas/matrix.tcc"
 #include "bigcat-blas/vector.h"
+#include "bigcat-blas/quaternion.h"
+
+#include "bigcat-blas/matrix.tcc"
 #include "bigcat-blas/vector.tcc"
+#include "bigcat-blas/quaternion.tcc"
 
 #endif

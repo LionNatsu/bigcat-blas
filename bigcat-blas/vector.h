@@ -25,6 +25,7 @@ namespace blas {
     public:
         vector() = default;
 
+        vector(const quaternion &);
         vector(const matrix<M, 1> &);
 
         vector(std::initializer_list<float>);

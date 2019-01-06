@@ -33,6 +33,21 @@ namespace blas {
     }
 
     template<size_t M>
+    vector<M>::vector(const quaternion &rhs) {
+        auto v = rhs.to_vector();
+        if (M == 3) {
+            operator()(0) = v(1);
+            operator()(1) = v(2);
+            operator()(2) = v(3);
+        } else if (M == 4) {
+            operator()(0) = v(0);
+            operator()(1) = v(1);
+            operator()(2) = v(2);
+            operator()(3) = v(3);
+        }
+    }
+
+    template<size_t M>
     vector <M> &vector<M>::operator=(const matrix<M, 1> &rhs) {
         matrix<M, 1>::operator=(rhs);
         return *this;
