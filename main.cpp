@@ -54,7 +54,6 @@ int main() {
         q = q.normalized();
         std::cout << euler_angles(q).to_string() << '\t' << tick * duration << 's' << std::endl;
     }
-    return q.a() == 0;
 }
 
 const blas::vector<3> euler_angles(const blas::quaternion &q) {
