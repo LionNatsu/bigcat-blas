@@ -64,11 +64,17 @@ namespace blas {
 
         const quaternion operator+(const quaternion &) const;
 
+        const quaternion operator-(const quaternion &) const;
+
         quaternion &operator+=(const quaternion &);
+
+        quaternion &operator-=(const quaternion &);
 
         const quaternion rotate(const quaternion &) const;
 
         const quaternion rotate_inv(const quaternion &) const;
+
+        const matrix<4> rotate_inv_jacobian(const quaternion &) const;
 
         const quaternion conj() const;
 

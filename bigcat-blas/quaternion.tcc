@@ -151,6 +151,27 @@ namespace blas {
         data += rhs;
         return *this;
     }
+
+    const matrix<4> quaternion::rotate_inv_jacobian(const quaternion &u) const {
+        auto dxq1 = u.b() * a(), dxq2 = u.b() * b(), dxq3 = u.b() * c(), dxq4 = u.b() * d();
+        auto dyq1 = u.c() * a(), dyq2 = u.c() * b(), dyq3 = u.c() * c(), dyq4 = u.c() * d();
+        auto dzq1 = u.d() * a(), dzq2 = u.d() * b(), dzq3 = u.d() * c(), dzq4 = u.d() * d();
+        return matrix<4>{
+                {0,            0,                      0,                       0},
+                {dyq4 - dzq3,  dyq3 + dzq4,            -2 * dxq3 + dyq2 - dzq1, -2 * dxq4 + dyq1 + dzq2},
+                {-dxq4 + dzq2, dxq3 - 2 * dyq2 + dzq1, dxq2 + dzq4,             -dxq1 - 2 * dyq4 + dzq3},
+                {dxq3 - dyq2,  dxq4 - dyq1 - 2 * dzq2, dxq1 + dyq4 - 2 * dzq3,  dxq2 + dyq3}
+        } * 2;
+    }
+
+    const quaternion quaternion::operator-(const quaternion &rhs) const {
+        return vector<4>(data - rhs.data);
+    }
+
+    quaternion &quaternion::operator-=(const quaternion &rhs) {
+        data -= rhs;
+        return *this;
+    }
 }
 
 #endif //BIGCAT_BLAS_QUATERNION_TCC
