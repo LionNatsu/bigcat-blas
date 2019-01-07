@@ -23,7 +23,7 @@
 #include "vector.h"
 #include "quaternion.h"
 
-
+#include <cmath>
 #include <cstring>
 
 namespace blas {
@@ -171,6 +171,15 @@ namespace blas {
     quaternion &quaternion::operator-=(const quaternion &rhs) {
         data -= rhs;
         return *this;
+    }
+
+    const vector<3> quaternion::to_euler_angles() const {
+        const float ARC2DEG = 180 / PI;
+        return {
+                ARC2DEG * atan2f(b() * c() + d() * a(), 0.5f - c() * c() - d() * d()),
+                ARC2DEG * asinf(-2.0f * (b() * d() - a() * c())),
+                ARC2DEG * atan2f(a() * b() + c() * d(), 0.5f - b() * b() - c() * c())
+        };
     }
 }
 

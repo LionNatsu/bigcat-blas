@@ -19,8 +19,13 @@
 #ifndef BIGCAT_BLAS_UTILS_H
 #define BIGCAT_BLAS_UTILS_H
 
+#include <cmath>
+
 namespace blas {
     float fast_inv_sqrt(float x) {
+        /*
+         * This could even return a negative number.
+         * Don't use this algorithm.
         float half_x = 0.5f * x;
         float y = x;
         long i = *(long *) &y;
@@ -28,8 +33,13 @@ namespace blas {
         y = *(float *) &i;
         y = y * (1.5f - (half_x * y * y));
         y = y * (1.5f - (half_x * y * y));
-        return y;
+        if(y <= 0) {
+                std::cerr << x << " ! " << y << std::endl;
+        }*/
+        return 1 / sqrtf(x);
     }
+
+    const float PI = 3.141593f;
 }
 
 #endif //BIGCAT_BLAS_UTILS_H

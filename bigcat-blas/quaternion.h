@@ -88,6 +88,8 @@ namespace blas {
 
         const vector<3> to_vector3() const;
 
+        const vector<3> to_euler_angles() const;
+
     private:
         vector<4> data;
     };
