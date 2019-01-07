@@ -128,6 +128,12 @@ namespace blas {
     }
 
     template<size_t M>
+    vector <M> &vector<M>::operator-=(const vector &rhs) {
+        matrix<M, 1>::operator-=(rhs);
+        return *this;
+    }
+
+    template<size_t M>
     const vector <M> operator*(float k, const vector <M> &vec) {
         return vec * k;
     }

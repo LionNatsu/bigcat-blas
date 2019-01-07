@@ -45,6 +45,8 @@ namespace blas {
 
         vector &operator+=(const vector &);
 
+        vector &operator-=(const vector &);
+
         const vector operator*(float) const;
 
         const vector operator/(float) const;

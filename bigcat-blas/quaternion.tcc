@@ -127,12 +127,12 @@ namespace blas {
         return quaternion({a(), -b(), -c(), -d()});
     }
 
-    const quaternion quaternion::rotate(const quaternion &rhs) const {
-        return (*this) * rhs * (conj());
+    const quaternion quaternion::rotate(const quaternion &u) const {
+        return (*this) * u * (conj());
     }
 
-    const quaternion quaternion::rotate_inv(const quaternion &rhs) const {
-        return (conj()) * rhs * (*this);
+    const quaternion quaternion::rotate_inv(const quaternion &u) const {
+        return (conj()) * u * (*this);
     }
 
     const vector<4> quaternion::to_vector() const {

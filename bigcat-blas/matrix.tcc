@@ -161,6 +161,14 @@ namespace blas {
                 operator()(m, n) += rhs(m, n);
         return *this;
     }
+
+    template<size_t M, size_t N>
+    matrix <M, N> &matrix<M, N>::operator-=(const matrix &rhs) {
+        for (size_t m = 0; m < M; m++)
+            for (size_t n = 0; n < N; n++)
+                operator()(m, n) -= rhs(m, n);
+        return *this;
+    }
 }
 
 #endif //BIGCAT_BLAS_MATRIX_TCC
