@@ -16,23 +16,25 @@ namespace physical_model {
 int main() {
     using blas::quaternion;
     using blas::vector;
+    using blas::matrix;
 
     const float duration = 0.01;
     int tick = 0;
     quaternion q = {1, 0, 0, 0};
 
     /*
-     * Inspired by Madgwick's implementation of Mahony's AHRS algorithm.
      * See http://x-io.co.uk/open-source-imu-and-ahrs-algorithms/
      */
-    const float Kp = 120.0, Ki = 0.02;
+    const float beta = 0.1;
     vector<3> integrated_error;
     for (;;) {
-        if (tick++ == 100) break;
+        if (tick++ == 200) break;
         const vector<3> acc = physical_model::accelerometer().normalized();
         // Assume the real acceleration is pointing to z+,
         // i.e. there is no accelerated motion.
         const vector<3> acc_expect = q.rotate_inv({0, 0, 1});
+        const quaternion acc_error = vector<3>(acc_expect - acc);
+        const matrix<4> acc_jacobian = q.rotate_inv_jacobian({0, 0, 1});
 
         const vector<3> mag = physical_model::magnetometer().normalized();
         const vector<3> mag_0 = q.rotate(mag);
@@ -42,15 +44,20 @@ int main() {
         // Assume the real direction of magnetic field is in surface y=0, pointing to x+,
         // i.e. there is no electromagnetic interference.
         const vector<3> mag_expect = q.rotate_inv({mag_h, 0, mag_v});
+        const quaternion mag_error = vector<3>(mag_expect - mag);
+        const matrix<4> mag_jacobian = q.rotate_inv_jacobian({mag_h, 0, mag_v});
 
-        const vector<3> error = acc.cross(acc_expect) + mag.cross(mag_expect);
+        const quaternion gradient = vector<4>(
+                acc_jacobian.trans() * acc_error.to_vector() +
+                mag_jacobian.trans() * mag_error.to_vector()
+        ).normalized();
 
         vector<3> gyr = physical_model::gyroscope();
-        integrated_error += Ki * error * duration;
-        gyr += integrated_error + Kp * error;
 
         // Approximate the integral
-        q += 0.5 * q * gyr * duration;
+        quaternion q_new = 0.5 * q * gyr;
+        q_new -= beta * gradient;
+        q += q_new * duration;
         q = q.normalized();
         std::cout << euler_angles(q).to_string() << '\t' << tick * duration << 's' << std::endl;
     }
